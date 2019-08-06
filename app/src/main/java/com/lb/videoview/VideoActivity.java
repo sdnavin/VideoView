@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import android.media.MediaPlayer;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -52,6 +53,9 @@ import com.acs.smartcard.TlvProperties;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileWriter;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -67,6 +71,10 @@ public class VideoActivity extends Activity {
     private FrameLayout mainLayout;
     private FrameLayout fbLayout;
 
+    private  EditText InputFb;
+
+
+    private Button submitButton;
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
     private static final String[] powerActionStrings = { "Power Down",
@@ -200,11 +208,7 @@ public class VideoActivity extends Activity {
 
             } else {
 
-//                textView.setText("Reader name: " + mReader.getReaderName());
-
                 int numSlots = mReader.getNumSlots();
-//                textView.setText("Number of slots: " + numSlots);
-//                textView.setText("s : "+numSlots);
                 if (numSlots > 0) {
                     for (UsbDevice device : mManager.getDeviceList().values()) {
 
@@ -217,25 +221,6 @@ public class VideoActivity extends Activity {
                     }
                 }
 
-                // Remove all control codes
-//                mFeatures.clear();
-//
-//                // Enable buttons
-//                mCloseButton.setEnabled(true);
-//                mSlotSpinner.setEnabled(true);
-//                mGetStateButton.setEnabled(true);
-//                mPowerSpinner.setEnabled(true);
-//                mPowerButton.setEnabled(true);
-//                mGetAtrButton.setEnabled(true);
-//                mT0CheckBox.setEnabled(true);
-//                mT1CheckBox.setEnabled(true);
-//                mSetProtocolButton.setEnabled(true);
-//                mGetProtocolButton.setEnabled(true);
-//                mTransmitButton.setEnabled(true);
-//                mControlButton.setEnabled(true);
-//                mGetFeaturesButton.setEnabled(true);
-//                mReadKeyButton.setEnabled(true);
-//                mDisplayLcdMessageButton.setEnabled(true);
             }
         }
     }
@@ -257,15 +242,38 @@ public class VideoActivity extends Activity {
     }
 
 
+    private OnClickListener buttonSubmitListener = new OnClickListener() {
+        @Override
+        public void onClick(View v){
+            writeStringAsFile(InputFb.getText().toString(),DateFormat.getDateTimeInstance().format(new Date()));
+            fbLayout.setVisibility(View.INVISIBLE);
+        }
+    };
+
+    public void writeStringAsFile(String fileContents, String fileName) {
+        Context context = this.getBaseContext();
+        try {
+            FileWriter out = new FileWriter(new File(context.getFilesDir(), fileName));
+            out.write(fileContents);
+            out.close();
+        } catch (java.io.IOException e) {
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        canPlay=false;
+        canPlay=true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
 //        textView=findViewById(R.id.textView);
         videoView=findViewById(R.id.videoView);
+        InputFb =findViewById((R.id.feedback));
+        fbLayout=findViewById(R.id.fbLayout);
+        mainLayout=findViewById(R.id.mainLayout);
+
+        submitButton=findViewById(R.id.submit_button);
+        submitButton.setOnClickListener(buttonSubmitListener);
         // Get USB manager
         mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
         // Initialize reader
@@ -308,9 +316,6 @@ public class VideoActivity extends Activity {
                       }
                     }
                 });
-
-
-
             }
         });
 
@@ -370,6 +375,7 @@ public class VideoActivity extends Activity {
 
 
     public void playVideo() {
+        Log.d("D","Playing Video");
         MediaController m = new MediaController(this);
         videoView.setMediaController(m);
         String path = "android.resource://com.lb.videoview/"+ R.raw.marvel;
@@ -379,6 +385,12 @@ public class VideoActivity extends Activity {
         videoView.setVideoURI(u);
         videoView.seekTo(0);
         videoView.start();
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                fbLayout.setVisibility((View.VISIBLE));
+            }
+        });
     }
     public void stopVideo() {
         videoView.stopPlayback();
