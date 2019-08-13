@@ -51,6 +51,7 @@ import com.acs.smartcard.Reader;
 import com.acs.smartcard.Reader.OnStateChangeListener;
 import com.acs.smartcard.TlvProperties;
 
+import com.acs.smartcard.ReaderException;
 import org.w3c.dom.Text;
 
 import java.io.File;
@@ -82,6 +83,24 @@ public class VideoActivity extends Activity {
 
     private static final String[] stateStrings = { "Unknown", "Absent",
             "Present", "Swallowed", "Powered", "Negotiable", "Specific" };
+
+    String Uid1="";
+    String Uid2="";
+    String Uid3="";
+    String Uid4="";
+    String Uid5="";
+    String Uid6="";
+    String Uid7="";
+    String Uid8="";
+
+    String SrcPath1 = "/sdcard/Video/video01.mp4";
+    String SrcPath2 = "/sdcard/Video/video02.mp4";
+    String SrcPath3 = "/sdcard/Video/video03.mp4";
+    String SrcPath4 = "/sdcard/Video/video04.mp4";
+    String SrcPath5 = "/sdcard/Video/video05.mp4";
+    String SrcPath6 = "/sdcard/Video/video06.mp4";
+    String SrcPath7 = "/sdcard/Video/video07.mp4";
+    String SrcPath8 = "/sdcard/Video/video08.mp4";
 
     private static final String[] featureStrings = { "FEATURE_UNKNOWN",
             "FEATURE_VERIFY_PIN_START", "FEATURE_VERIFY_PIN_FINISH",
@@ -115,6 +134,13 @@ public class VideoActivity extends Activity {
 
 
     private boolean canPlay;
+
+
+    private Features mFeatures = new Features();
+    private PinVerify mPinVerify = new PinVerify();
+    private PinModify mPinModify = new PinModify();
+    private ReadKeyOption mReadKeyOption = new ReadKeyOption();
+    private String mLcdMessage;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -225,6 +251,127 @@ public class VideoActivity extends Activity {
         }
     }
 
+    private class PowerParams {
+
+        public int slotNum;
+        public int action;
+    }
+
+    private class PowerResult {
+
+        public byte[] atr;
+        public Exception e;
+    }
+
+    private class PowerTask extends AsyncTask<PowerParams, Void, PowerResult> {
+
+        @Override
+        protected PowerResult doInBackground(PowerParams... params) {
+
+            PowerResult result = new PowerResult();
+
+            try {
+
+                result.atr = mReader.power(params[0].slotNum, params[0].action);
+
+            } catch (Exception e) {
+
+                result.e = e;
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(PowerResult result) {
+
+            if (result.e != null) {
+
+                //logMsg(result.e.toString());
+
+            } else {
+
+                // Show ATR
+                if (result.atr != null) {
+
+                    //logMsg("ATR:");
+//                    logBuffer(result.atr, result.atr.length);
+
+                } else {
+
+                    //logMsg("ATR: None");
+                }
+            }
+        }
+    }
+
+
+    private class SetProtocolParams {
+
+        public int slotNum;
+        public int preferredProtocols;
+    }
+
+    private class SetProtocolResult {
+
+        public int activeProtocol;
+        public Exception e;
+    }
+
+
+    private class SetProtocolTask extends
+            AsyncTask<SetProtocolParams, Void, SetProtocolResult> {
+
+        @Override
+        protected SetProtocolResult doInBackground(SetProtocolParams... params) {
+
+            SetProtocolResult result = new SetProtocolResult();
+
+            try {
+
+                result.activeProtocol = mReader.setProtocol(params[0].slotNum,
+                        params[0].preferredProtocols);
+
+            } catch (Exception e) {
+
+                result.e = e;
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(SetProtocolResult result) {
+
+            if (result.e != null) {
+
+                //logMsg(result.e.toString());
+
+            } else {
+
+                String activeProtocolString = "Active Protocol: ";
+
+                switch (result.activeProtocol) {
+
+                    case Reader.PROTOCOL_T0:
+                        activeProtocolString += "T=0";
+                        break;
+
+                    case Reader.PROTOCOL_T1:
+                        activeProtocolString += "T=1";
+                        break;
+
+                    default:
+                        activeProtocolString += "Unknown";
+                        break;
+                }
+
+                // Show active protocol
+                //logMsg(activeProtocolString);
+            }
+        }
+    }
+
     private class CloseTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -293,29 +440,81 @@ public class VideoActivity extends Activity {
                     currState = Reader.CARD_UNKNOWN;
                 }
 
-                // Create output string
-                final String outputString = "Slot " + slotNum + ": "
-                        + stateStrings[prevState] + " -> "
-                        + stateStrings[currState];
+
+                PowerParams params = new PowerParams();
+                params.slotNum = 0;
+                params.action = Reader.CARD_WARM_RESET;
+                new PowerTask().execute(params);
+
+                SetProtocolParams sparams = new SetProtocolParams();
+                sparams.slotNum = 0;
+                sparams.preferredProtocols = Reader.PROTOCOL_T1;
+
+                new SetProtocolTask().execute(sparams);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //Create output string
+                //final String outputString = "Slot " + slotNum + ": " + stateStrings[prevState] + " -> " + stateStrings[currState];
+                String mystring;
+                byte message = (byte)0xFF;
+                byte[] baReadUID;
+                baReadUID = new byte[] { (byte) 0xFF, (byte) 0xCA, (byte) 0x00, (byte) 0x00, (byte) 0x00 };
+                byte[] baSwitchOnLCD;
+                baSwitchOnLCD = new byte[] { (byte) 0xFF, (byte) 0x00, (byte) 0x64, (byte) 0xFF, (byte) 0x00 };
+                byte[] displaytext = new byte[] { (byte) 0xFF, (byte) 0x00, (byte) 0x68, (byte) 0x00, (byte)0x01, message };
+                byte[] baResp = new byte[258];
+                byte[] baReadUIDx = new byte[7];
+
+
+                try {
+                    int x = mReader.transmit(0,baReadUID,baReadUID.length,baResp,baResp.length);
+                    //mystring = UIDBuffer(baResp,baReadUIDx.length);
+                    mystring = UIDBuffer(baResp,baReadUIDx.length);
+                    Log.e("UID", mystring);
+                    Log.e("UIDxxxx", x+"");
+                    int y = mReader.control(0,3500,baSwitchOnLCD,baSwitchOnLCD.length,baResp,baResp.length);
+                    int z = mReader.control(0,3500,displaytext,displaytext.length,baResp,baResp.length);
+
+
+
+                } catch (ReaderException e) {
+                    mystring = e.getMessage();
+
+//                    e.printStackTrace();
+                }
+
+
+                final String outputString = mystring;
 
 
                 if(stateStrings[currState]==stateStrings[2]){
                     canPlay=true;
                 }
-
-
                 // Show output
                 runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-//                        textView.setText(outputString);
-                      if(canPlay) {
-                          playVideo();
-                          canPlay=false;
-                      }
+                        checkVideo(outputString);
                     }
                 });
+
+                // Show output
+//                runOnUiThread(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        textView.setText(outputString);
+//                      if(canPlay) {
+//                          playVideo();
+//                          canPlay=false;
+//                      }
+//                    }
+//                });
             }
         });
 
@@ -374,12 +573,12 @@ public class VideoActivity extends Activity {
 
 
 
-    public void playVideo() {
+    public void playVideo(String Dpath) {
         Log.d("D","Playing Video");
         MediaController m = new MediaController(this);
         videoView.setMediaController(m);
         String path = "android.resource://com.lb.videoview/"+ R.raw.marvel;
-
+        path=Dpath;
         Uri u = Uri.parse(path);
 
         videoView.setVideoURI(u);
@@ -394,6 +593,68 @@ public class VideoActivity extends Activity {
     }
     public void stopVideo() {
         videoView.stopPlayback();
+    }
+
+    private void checkVideo(String msg){
+        if(msg.equals(Uid1)){
+            //okay concern video
+            playVideo(SrcPath1);
+        }else if(msg.equals(Uid2)){
+            //okay concern video
+            playVideo(SrcPath2);
+        }else if(msg.equals(Uid3)){
+            //okay concern video
+            playVideo(SrcPath3);
+        }else if(msg.equals(Uid4)){
+            //okay concern video
+            playVideo(SrcPath4);
+        }else if(msg.equals(Uid5)){
+            //okay concern video
+            playVideo(SrcPath5);
+        }else if(msg.equals(Uid6)){
+            //okay concern video
+            playVideo(SrcPath6);
+        }else if(msg.equals(Uid7)){
+            //okay concern video
+            playVideo(SrcPath7);
+        }else if(msg.equals(Uid8)){
+            //okay concern video
+            playVideo(SrcPath8);
+        }
+    }
+
+    private String UIDBuffer(byte[] buffer, int bufferLength) {
+        //5352C1ED9000000000000
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                mainbg.setBackground(getResources().getDrawable(R.color.green));
+            }
+        });
+
+        String bufferString = "";
+        Log.e("bufferLength",bufferLength+"");
+        for (int i = 0; i < bufferLength; i++) {
+
+            String hexChar = Integer.toHexString(buffer[i] & 0xFF);
+            if (hexChar.length() == 1) {
+                hexChar = "0" + hexChar;
+            }
+
+            if (i % 16 == 0) {
+
+                if (bufferString != "") {
+
+                    return bufferString;
+                }
+            }
+
+            bufferString += hexChar.toUpperCase();
+        }
+        if (bufferString != "") {
+            return bufferString;
+        }
+        return "Error";
     }
 
 }
