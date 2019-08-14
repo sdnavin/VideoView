@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.app.Activity;
 //import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -74,7 +75,7 @@ public class VideoActivity extends Activity {
 
     private  EditText InputFb;
 
-
+    private  boolean requested = false;
     private Button submitButton;
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
@@ -84,23 +85,23 @@ public class VideoActivity extends Activity {
     private static final String[] stateStrings = { "Unknown", "Absent",
             "Present", "Swallowed", "Powered", "Negotiable", "Specific" };
 
-    String Uid1="";
-    String Uid2="";
-    String Uid3="";
-    String Uid4="";
+    String Uid1="0377C2ED900000";
+    String Uid2="F317C2ED900000";
+    String Uid3="A33CC2ED900000";
+    String Uid4="7375C2ED900000";
     String Uid5="";
     String Uid6="";
     String Uid7="";
     String Uid8="";
 
-    String SrcPath1 = "/sdcard/Video/video01.mp4";
-    String SrcPath2 = "/sdcard/Video/video02.mp4";
-    String SrcPath3 = "/sdcard/Video/video03.mp4";
-    String SrcPath4 = "/sdcard/Video/video04.mp4";
-    String SrcPath5 = "/sdcard/Video/video05.mp4";
-    String SrcPath6 = "/sdcard/Video/video06.mp4";
-    String SrcPath7 = "/sdcard/Video/video07.mp4";
-    String SrcPath8 = "/sdcard/Video/video08.mp4";
+    String SrcPath1 = "/Movies/video01.mp4";
+    String SrcPath2 = "/Movies/video02.mp4";
+    String SrcPath3 = "/Movies/video03.mp4";
+    String SrcPath4 = "/Movies/video04.mp4";
+    String SrcPath5 = "/Movies/video05.mp4";
+    String SrcPath6 = "/Movies/video06.mp4";
+    String SrcPath7 = "/Movies/video07.mp4";
+    String SrcPath8 = "/Movies/video08.mp4";
 
     private static final String[] featureStrings = { "FEATURE_UNKNOWN",
             "FEATURE_VERIFY_PIN_START", "FEATURE_VERIFY_PIN_FINISH",
@@ -126,7 +127,8 @@ public class VideoActivity extends Activity {
 
 
 
-    private ArrayAdapter<String> mReaderAdapter;
+//    private ArrayAdapter<String> mReaderAdapter;
+//    private ArrayAdapter<String> mSlotAdapter;
 
     private UsbManager mManager;
     private Reader mReader;
@@ -163,6 +165,8 @@ public class VideoActivity extends Activity {
 //                            textView.setText("Opening reader: " + device.getDeviceName()
 //                                    + "...");
                             new OpenTask().execute(device);
+                            RequestDevice();
+
                         }
 
                     } else {
@@ -180,12 +184,14 @@ public class VideoActivity extends Activity {
                 synchronized (this) {
 
                     // Update reader list
-                    mReaderAdapter.clear();
-                    for (UsbDevice device : mManager.getDeviceList().values()) {
-                        if (mReader.isSupported(device)) {
-                            mReaderAdapter.add(device.getDeviceName());
-                        }
-                    }
+//                    mReaderAdapter.clear();
+//                    for (UsbDevice device : mManager.getDeviceList().values()) {
+//                        if (mReader.isSupported(device)) {
+//                            mReaderAdapter.add(device.getDeviceName());
+//                        }
+//                    }
+                    // Clear slot items
+//                    mSlotAdapter.clear();
 
                     UsbDevice device = (UsbDevice) intent
                             .getParcelableExtra(UsbManager.EXTRA_DEVICE);
@@ -195,7 +201,7 @@ public class VideoActivity extends Activity {
                         // Disable buttons
 
                         // Clear slot items
-
+//                        mSlotAdapter.clear();
                         // Close reader
 //                        logMsg("Closing reader...");
                         new CloseTask().execute();
@@ -220,6 +226,7 @@ public class VideoActivity extends Activity {
             } catch (Exception e) {
 
                 result = e;
+                RequestDevice();
             }
 
             return result;
@@ -233,22 +240,31 @@ public class VideoActivity extends Activity {
 //                    textView.setText(result.toString());
 
             } else {
-
                 int numSlots = mReader.getNumSlots();
-                if (numSlots > 0) {
-                    for (UsbDevice device : mManager.getDeviceList().values()) {
-
-                        {
-                            // Request permission
-                            mManager.requestPermission(device,
-                                    mPermissionIntent);
-                            break;
-                        }
-                    }
-                }
+                // Add slot items
+//                mSlotAdapter.clear();
+//                for (int i = 0; i < numSlots; i++) {
+//                    mSlotAdapter.add(Integer.toString(i));
+//                }
 
             }
         }
+    }
+
+    private class CloseTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            mReader.close();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+//            mOpenButton.setEnabled(true);
+        }
+
     }
 
     private class PowerParams {
@@ -295,7 +311,7 @@ public class VideoActivity extends Activity {
                 if (result.atr != null) {
 
                     //logMsg("ATR:");
-//                    logBuffer(result.atr, result.atr.length);
+                    logBuffer(result.atr, result.atr.length);
 
                 } else {
 
@@ -372,38 +388,103 @@ public class VideoActivity extends Activity {
         }
     }
 
-    private class CloseTask extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected Void doInBackground(Void... params) {
+    private void logBuffer(byte[] buffer, int bufferLength) {
 
-            mReader.close();
-            return null;
+        String bufferString = "";
+
+        for (int i = 0; i < bufferLength; i++) {
+
+            String hexChar = Integer.toHexString(buffer[i] & 0x90);
+            if (hexChar.length() == 1) {
+                hexChar = "0" + hexChar;
+            }
+
+            if (i % 16 == 0) {
+
+                if (bufferString != "") {
+
+                    //logMsg(bufferString);
+                    bufferString = "";
+                }
+            }
+
+            bufferString += hexChar.toUpperCase() + " ";
         }
 
-        @Override
-        protected void onPostExecute(Void result) {
-//            mOpenButton.setEnabled(true);
+        if (bufferString != "") {
+            // logMsg(bufferString);
         }
-
     }
 
+    private String UIDBuffer(byte[] buffer, int bufferLength) {
+//        //5352C1ED9000000000000
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+////                mainbg.setBackground(getResources().getDrawable(R.color.green));
+//            }
+//        });
+
+        String bufferString = "";
+        Log.e("bufferLength",bufferLength+"");
+        for (int i = 0; i < bufferLength; i++) {
+
+            String hexChar = Integer.toHexString(buffer[i] & 0xFF);
+            if (hexChar.length() == 1) {
+                hexChar = "0" + hexChar;
+            }
+
+            if (i % 16 == 0) {
+
+                if (bufferString != "") {
+
+                    return bufferString;
+                }
+            }
+
+            bufferString += hexChar.toUpperCase();
+        }
+        if (bufferString != "") {
+            return bufferString;
+        }
+        return "Error";
+    }
 
     private OnClickListener buttonSubmitListener = new OnClickListener() {
         @Override
         public void onClick(View v){
-            writeStringAsFile(InputFb.getText().toString(),DateFormat.getDateTimeInstance().format(new Date()));
+            java.util.Locale locale = new 	java.util.Locale("EN");
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("hh-mm-ss-a", locale);
+            String dataIn=df.format(new Date());
+
+            writeStringAsFile(InputFb.getText().toString(),dataIn);
             fbLayout.setVisibility(View.INVISIBLE);
+            InputFb.setText("I love the content");
         }
     };
 
     public void writeStringAsFile(String fileContents, String fileName) {
+        Log.d("video",fileName);
         Context context = this.getBaseContext();
+        java.util.Locale locale = new 	java.util.Locale("EN");
+        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd", locale);
+        String dataIn=df.format(new Date());
         try {
-            FileWriter out = new FileWriter(new File(context.getFilesDir(), fileName));
+            String dirPath=Environment.getExternalStorageDirectory()+"/Feedback/"+dataIn+"/";
+            File folder = new File(dirPath);
+            if(!folder.exists()){
+                folder.mkdirs();
+            }
+            Log.d("video",dirPath+fileName);
+            FileWriter out = new FileWriter(new File(dirPath, fileName+".txt"));
             out.write(fileContents);
             out.close();
+
+            File filecheck = new File(dirPath+fileName);
+            Log.d("video","Check :"+filecheck.exists());
         } catch (java.io.IOException e) {
+            writeStringAsFile(fileContents,fileName);
         }
     }
 
@@ -417,7 +498,7 @@ public class VideoActivity extends Activity {
         videoView=findViewById(R.id.videoView);
         InputFb =findViewById((R.id.feedback));
         fbLayout=findViewById(R.id.fbLayout);
-        mainLayout=findViewById(R.id.mainLayout);
+        mainLayout=findViewById(R.id.videoLayout);
 
         submitButton=findViewById(R.id.submit_button);
         submitButton.setOnClickListener(buttonSubmitListener);
@@ -459,7 +540,7 @@ public class VideoActivity extends Activity {
                 }
                 //Create output string
                 //final String outputString = "Slot " + slotNum + ": " + stateStrings[prevState] + " -> " + stateStrings[currState];
-                String mystring;
+                String mystring="";
                 byte message = (byte)0xFF;
                 byte[] baReadUID;
                 baReadUID = new byte[] { (byte) 0xFF, (byte) 0xCA, (byte) 0x00, (byte) 0x00, (byte) 0x00 };
@@ -471,19 +552,16 @@ public class VideoActivity extends Activity {
 
 
                 try {
+
                     int x = mReader.transmit(0,baReadUID,baReadUID.length,baResp,baResp.length);
-                    //mystring = UIDBuffer(baResp,baReadUIDx.length);
                     mystring = UIDBuffer(baResp,baReadUIDx.length);
                     Log.e("UID", mystring);
-                    Log.e("UIDxxxx", x+"");
                     int y = mReader.control(0,3500,baSwitchOnLCD,baSwitchOnLCD.length,baResp,baResp.length);
                     int z = mReader.control(0,3500,displaytext,displaytext.length,baResp,baResp.length);
 
-
-
                 } catch (ReaderException e) {
                     mystring = e.getMessage();
-
+                    Log.e("video","Error : "+ mystring);
 //                    e.printStackTrace();
                 }
 
@@ -491,9 +569,9 @@ public class VideoActivity extends Activity {
                 final String outputString = mystring;
 
 
-                if(stateStrings[currState]==stateStrings[2]){
-                    canPlay=true;
-                }
+//                if(stateStrings[currState]==stateStrings[2]){
+//                    canPlay=true;
+//                }
                 // Show output
                 runOnUiThread(new Runnable() {
 
@@ -523,40 +601,50 @@ public class VideoActivity extends Activity {
 //        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 //Remove notification bar
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
-
-        // Register receiver for USB permission
-        mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
-                ACTION_USB_PERMISSION), 0);
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ACTION_USB_PERMISSION);
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-        registerReceiver(mReceiver, filter);
+try {
+    // Register receiver for USB permission
+    mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
+            ACTION_USB_PERMISSION), 0);
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(ACTION_USB_PERMISSION);
+    filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+    registerReceiver(mReceiver, filter);
 //        playVideo();
-
+}catch(Exception e){
+    e.printStackTrace();
+}
         // Initialize reader spinner
-        mReaderAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item);
-        for (UsbDevice device : mManager.getDeviceList().values()) {
-            if (mReader.isSupported(device)) {
-                mReaderAdapter.add(device.getDeviceName());
-            }
-        }
+//        mReaderAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item);
+//        mSlotAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item);
+//        for (UsbDevice device : mManager.getDeviceList().values()) {
+//            if (mReader.isSupported(device)) {
+//                mReaderAdapter.add(device.getDeviceName());
+//            }
+//        }
+        RequestDevice();
 
-        for (UsbDevice device : mManager.getDeviceList().values()) {
+    }
 
-            // If device name is found
+    void RequestDevice(){
+//        if(!requested) {
+            for (UsbDevice device : mManager.getDeviceList().values()) {
+
+                // If device name is found
 //            if (deviceName.equals(device.getDeviceName())) {
 
                 // Request permission
                 mManager.requestPermission(device,
                         mPermissionIntent);
 
-//                requested = true;
-//                break;
+                requested = true;
+                break;
             }
+//        }
     }
 
     @Override
@@ -574,28 +662,40 @@ public class VideoActivity extends Activity {
 
 
     public void playVideo(String Dpath) {
-        Log.d("D","Playing Video");
-        MediaController m = new MediaController(this);
-        videoView.setMediaController(m);
-        String path = "android.resource://com.lb.videoview/"+ R.raw.marvel;
-        path=Dpath;
-        Uri u = Uri.parse(path);
+        if(!videoView.isPlaying()) {
+            MediaController m = new MediaController(this);
+            videoView.setMediaController(m);
+            String path = "android.resource://com.lb.videoview/" + R.raw.marvel;
+            path = Dpath;
+            Uri u = Uri.parse(Environment.getExternalStorageDirectory() +path);
 
-        videoView.setVideoURI(u);
-        videoView.seekTo(0);
-        videoView.start();
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                fbLayout.setVisibility((View.VISIBLE));
-            }
-        });
+//            File f = new File(Environment.getExternalStorageDirectory() + path);
+
+//            Log.d("video", f.exists() + "Playing Video " + Environment.getExternalStorageDirectory() + path);
+
+            videoView.setVideoURI(u);
+            videoView.seekTo(0);
+            videoView.start();
+            fbLayout.setVisibility(View.INVISIBLE);
+            videoView.setVisibility((View.VISIBLE));
+            mainLayout.setVisibility(View.VISIBLE);
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    fbLayout.clearAnimation();
+                    videoView.setVisibility((View.INVISIBLE));
+                    mainLayout.setVisibility(View.INVISIBLE);
+                    fbLayout.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
     public void stopVideo() {
         videoView.stopPlayback();
     }
 
     private void checkVideo(String msg){
+        Log.d("video",msg);
         if(msg.equals(Uid1)){
             //okay concern video
             playVideo(SrcPath1);
@@ -623,38 +723,6 @@ public class VideoActivity extends Activity {
         }
     }
 
-    private String UIDBuffer(byte[] buffer, int bufferLength) {
-        //5352C1ED9000000000000
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                mainbg.setBackground(getResources().getDrawable(R.color.green));
-            }
-        });
 
-        String bufferString = "";
-        Log.e("bufferLength",bufferLength+"");
-        for (int i = 0; i < bufferLength; i++) {
-
-            String hexChar = Integer.toHexString(buffer[i] & 0xFF);
-            if (hexChar.length() == 1) {
-                hexChar = "0" + hexChar;
-            }
-
-            if (i % 16 == 0) {
-
-                if (bufferString != "") {
-
-                    return bufferString;
-                }
-            }
-
-            bufferString += hexChar.toUpperCase();
-        }
-        if (bufferString != "") {
-            return bufferString;
-        }
-        return "Error";
-    }
 
 }
