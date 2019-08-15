@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
@@ -13,12 +14,29 @@
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg" />
+        android:adjustViewBounds="false"
+        android:padding="0dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/background_light"
+        android:textSize="72sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        tools:text="Please Scan here" />
 
     <FrameLayout
         android:id="@+id/videoLayout"
@@ -33,7 +51,7 @@
         <!--android:id="@+id/fullscreen_content_controls"-->
         <!--style="?metaButtonBarStyle"-->
         <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
         <!--android:layout_gravity="bottom|center_horizontal"-->
         <!--android:background="@color/black_overlay"-->
         <!--android:orientation="vertical"-->
@@ -44,8 +62,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+
             android:foregroundGravity="center"
             android:visibility="invisible" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/skipBut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1050dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/transparent"
+                android:text="Skip"
+                android:textColor="@android:color/background_light" />
+        </RelativeLayout>
 
         <!--</LinearLayout>-->
     </FrameLayout>
@@ -80,6 +114,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="250dp"
             android:ems="10"
+            android:focusable="auto"
             android:gravity="left"
             android:inputType="textPersonName"
             android:paddingLeft="50dp"
@@ -102,5 +137,4 @@
             android:textSize="25sp"
             android:textStyle="bold" />
     </FrameLayout>
-
 </FrameLayout>

@@ -14,14 +14,29 @@
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="false"
         android:padding="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg" />
+        android:scaleType="centerInside"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/background_light"
+        android:textSize="72sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        tools:text="Please Scan here" />
 
     <FrameLayout
         android:id="@+id/videoLayout"
@@ -50,6 +65,22 @@
 
             android:foregroundGravity="center"
             android:visibility="invisible" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/skipBut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1050dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                android:text="Skip"
+                android:textColorLink="@android:color/background_light" />
+        </RelativeLayout>
 
         <!--</LinearLayout>-->
     </FrameLayout>
@@ -84,6 +115,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="250dp"
             android:ems="10"
+            android:focusable="auto"
             android:gravity="left"
             android:inputType="textPersonName"
             android:paddingLeft="50dp"

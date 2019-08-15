@@ -5,6 +5,7 @@ import android.app.Activity;
 //import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -17,9 +18,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.PendingIntent;
@@ -57,6 +62,7 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.List;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -76,7 +82,12 @@ public class VideoActivity extends Activity {
     private  EditText InputFb;
 
     private  boolean requested = false;
+
     private Button submitButton;
+    private Button skipButton;
+
+    private TextView ScantextView;
+
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
     private static final String[] powerActionStrings = { "Power Down",
@@ -85,14 +96,14 @@ public class VideoActivity extends Activity {
     private static final String[] stateStrings = { "Unknown", "Absent",
             "Present", "Swallowed", "Powered", "Negotiable", "Specific" };
 
-    String Uid1="0377C2ED900000";
-    String Uid2="F317C2ED900000";
-    String Uid3="A33CC2ED900000";
-    String Uid4="7375C2ED900000";
-    String Uid5="";
-    String Uid6="";
-    String Uid7="";
-    String Uid8="";
+    List<String> Uid1;//="0377C2ED900000";
+    List<String> Uid2;//="F317C2ED900000";
+    List<String> Uid3;//="A33CC2ED900000";
+    List<String> Uid4;//="7375C2ED900000";
+//    String Uid5="";
+//    String Uid6="";
+//    String Uid7="";
+//    String Uid8="";
 
     String SrcPath1 = "/Movies/video01.mp4";
     String SrcPath2 = "/Movies/video02.mp4";
@@ -464,6 +475,17 @@ public class VideoActivity extends Activity {
         }
     };
 
+    private OnClickListener buttonSkipListener = new OnClickListener() {
+        @Override
+        public void onClick(View v){
+          videoView.stopPlayback();
+            fbLayout.clearAnimation();
+            videoView.setVisibility((View.INVISIBLE));
+            mainLayout.setVisibility(View.INVISIBLE);
+            fbLayout.setVisibility(View.VISIBLE);
+        }
+    };
+
     public void writeStringAsFile(String fileContents, String fileName) {
         Log.d("video",fileName);
         Context context = this.getBaseContext();
@@ -488,9 +510,48 @@ public class VideoActivity extends Activity {
         }
     }
 
+    void ReadRFIDs(){
+        FileInputStream is;
+        BufferedReader reader;
+        final File file = new File(Environment.getExternalStorageDirectory() +"/Movies/rfid.txt");
+//        Log.d("video", "E : "+file.exists());
+        try {
+            if (file.exists()) {
+                is = new FileInputStream(file);
+                reader = new BufferedReader(new InputStreamReader(is));
+                String line = reader.readLine();
+                int count=1;
+
+                Uid1=new ArrayList<String>();
+                Uid2=new ArrayList<String>();
+                Uid3=new ArrayList<String>();
+                Uid4=new ArrayList<String>();
+                while (line != null) {
+//                    Log.d("video", line);
+                    line = reader.readLine();
+                    if(!TextUtils.isEmpty(line)){
+                        if(count==1){
+                            Uid1.add(line);
+                        }else if(count==2){
+                            Uid2.add(line);
+                        }else if(count==3){
+                            Uid3.add(line);
+                        }else if(count==4){
+                            Uid4.add(line);
+                        }
+                    }else{
+                        count+=1;
+                    }
+                }
+            }
+
+        }catch (java.io.IOException e){
+
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         canPlay=true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
@@ -501,11 +562,31 @@ public class VideoActivity extends Activity {
         mainLayout=findViewById(R.id.videoLayout);
 
         submitButton=findViewById(R.id.submit_button);
+        skipButton=findViewById((R.id.skipBut));
+        ScantextView=findViewById(((R.id.textView2)));
+        ScantextView.setText("Please scan here");
+
+        ReadRFIDs();
+
+//        android.util.DisplayMetrics displaymetrics = getResources().getDisplayMetrics();
+//
+//        skipButton.setX(displaymetrics.widthPixels -(skipButton.getHeight()+20));
+//        skipButton.setY(0);
+        skipButton.setOnClickListener(buttonSkipListener);
         submitButton.setOnClickListener(buttonSubmitListener);
         // Get USB manager
         mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
         // Initialize reader
         mReader = new Reader(mManager);
+
+        InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    HideView();
+                }
+            }
+        });
         mReader.setOnStateChangeListener(new OnStateChangeListener() {
 
             @Override
@@ -602,7 +683,9 @@ public class VideoActivity extends Activity {
 
 //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
 try {
     // Register receiver for USB permission
@@ -630,12 +713,33 @@ try {
 
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            HideView();
+        }
+    }
+
+    void HideView(){
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
     void RequestDevice(){
 //        if(!requested) {
+
             for (UsbDevice device : mManager.getDeviceList().values()) {
 
                 // If device name is found
-//            if (deviceName.equals(device.getDeviceName())) {
+            if (mReader.isSupported(device)) {
 
                 // Request permission
                 mManager.requestPermission(device,
@@ -644,7 +748,7 @@ try {
                 requested = true;
                 break;
             }
-//        }
+        }
     }
 
     @Override
@@ -662,9 +766,11 @@ try {
 
 
     public void playVideo(String Dpath) {
-        if(!videoView.isPlaying()) {
-            MediaController m = new MediaController(this);
-            videoView.setMediaController(m);
+//        if(!videoView.isPlaying())
+        {
+//            MediaController m = new MediaController(this);
+//            videoView.setMediaController(m);
+            videoView.setMediaController(null);
             String path = "android.resource://com.lb.videoview/" + R.raw.marvel;
             path = Dpath;
             Uri u = Uri.parse(Environment.getExternalStorageDirectory() +path);
@@ -694,33 +800,45 @@ try {
         videoView.stopPlayback();
     }
 
+    boolean CheckVideoList(String msg,List<String> videos){
+        for(int t=0;t<videos.size();t++){
+//            Log.e("video",videos.get(t));
+            if(videos.get(t).contains(msg)){
+                return true;
+            }
+        }
+        return false;
+    }
     private void checkVideo(String msg){
-        Log.d("video",msg);
-        if(msg.equals(Uid1)){
+//        Log.d("video",msg);
+        if(msg.length()>14)
+            return;
+        if(CheckVideoList(msg,Uid1)){
             //okay concern video
             playVideo(SrcPath1);
-        }else if(msg.equals(Uid2)){
+        }else if(CheckVideoList(msg,Uid2)){
             //okay concern video
             playVideo(SrcPath2);
-        }else if(msg.equals(Uid3)){
+        }else if(CheckVideoList(msg,Uid3)){
             //okay concern video
             playVideo(SrcPath3);
-        }else if(msg.equals(Uid4)){
+        }else if(CheckVideoList(msg,Uid4)){
             //okay concern video
             playVideo(SrcPath4);
-        }else if(msg.equals(Uid5)){
-            //okay concern video
-            playVideo(SrcPath5);
-        }else if(msg.equals(Uid6)){
-            //okay concern video
-            playVideo(SrcPath6);
-        }else if(msg.equals(Uid7)){
-            //okay concern video
-            playVideo(SrcPath7);
-        }else if(msg.equals(Uid8)){
-            //okay concern video
-            playVideo(SrcPath8);
         }
+//        else if(msg.equals(Uid5)){
+//            //okay concern video
+//            playVideo(SrcPath5);
+//        }else if(msg.equals(Uid6)){
+//            //okay concern video
+//            playVideo(SrcPath6);
+//        }else if(msg.equals(Uid7)){
+//            //okay concern video
+//            playVideo(SrcPath7);
+//        }else if(msg.equals(Uid8)){
+//            //okay concern video
+//            playVideo(SrcPath8);
+//        }
     }
 
 
