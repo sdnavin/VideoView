@@ -513,12 +513,14 @@ public class VideoActivity extends Activity {
     void ReadRFIDs(){
         FileInputStream is;
         BufferedReader reader;
-        final File file = new File(Environment.getExternalStorageDirectory() +"/Movies/rfid.txt");
+//        final File file = new File(Environment.getExternalStorageDirectory() +"/Movies/rfid.txt");
+//        final File file = new File("android.resource://com.lb.videoview/" + R.raw.rfid);
 //        Log.d("video", "E : "+file.exists());
         try {
-            if (file.exists()) {
-                is = new FileInputStream(file);
-                reader = new BufferedReader(new InputStreamReader(is));
+//            if (file.exists())
+            {
+//                is = new FileInputStream(file);
+                reader = new BufferedReader(new InputStreamReader(this.getBaseContext().getResources().openRawResource(R.raw.rfid)));
                 String line = reader.readLine();
                 int count=1;
 
@@ -642,7 +644,7 @@ public class VideoActivity extends Activity {
 
                 } catch (ReaderException e) {
                     mystring = e.getMessage();
-                    Log.e("video","Error : "+ mystring);
+//                    Log.e("video","Error : "+ mystring);
 //                    e.printStackTrace();
                 }
 
@@ -771,13 +773,11 @@ try {
 //            MediaController m = new MediaController(this);
 //            videoView.setMediaController(m);
             videoView.setMediaController(null);
-            String path = "android.resource://com.lb.videoview/" + R.raw.marvel;
-            path = Dpath;
-            Uri u = Uri.parse(Environment.getExternalStorageDirectory() +path);
+            Uri u = Uri.parse(Environment.getExternalStorageDirectory() +Dpath);
 
-//            File f = new File(Environment.getExternalStorageDirectory() + path);
-
-//            Log.d("video", f.exists() + "Playing Video " + Environment.getExternalStorageDirectory() + path);
+//            File f = new File(Environment.getExternalStorageDirectory() + Dpath);
+//
+//            Log.d("video", f.exists() + "Playing Video " + Environment.getExternalStorageDirectory() + Dpath);
 
             videoView.setVideoURI(u);
             videoView.seekTo(0);
