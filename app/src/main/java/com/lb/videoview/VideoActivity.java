@@ -528,12 +528,13 @@ public class VideoActivity extends Activity {
                 Uid2=new ArrayList<String>();
                 Uid3=new ArrayList<String>();
                 Uid4=new ArrayList<String>();
+                Uid1.add(line);
                 while (line != null) {
-//                    Log.d("video", line);
                     line = reader.readLine();
                     if(!TextUtils.isEmpty(line)){
                         if(count==1){
                             Uid1.add(line);
+//                            Log.d("video", line+"--"+Uid1.size()+"");
                         }else if(count==2){
                             Uid2.add(line);
                         }else if(count==3){
@@ -545,6 +546,7 @@ public class VideoActivity extends Activity {
                         count+=1;
                     }
                 }
+
             }
 
         }catch (java.io.IOException e){
