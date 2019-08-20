@@ -619,7 +619,7 @@ public class VideoActivity extends Activity {
                 new SetProtocolTask().execute(sparams);
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
