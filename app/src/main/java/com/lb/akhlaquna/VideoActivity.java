@@ -1,4 +1,4 @@
-package com.lb.videoview;
+package com.lb.akhlaquna;
 
 import android.net.Uri;
 import android.app.Activity;
@@ -7,10 +7,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.MediaController;
-import android.widget.VideoView;
 
 import android.media.MediaPlayer;
 
@@ -45,6 +44,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -73,20 +74,53 @@ public class VideoActivity extends Activity {
     /**
      * Video Init
      */
-    private VideoView videoView;
 
 
-    private FrameLayout mainLayout;
-    private FrameLayout fbLayout;
+    private FrameLayout[] pageLayout;
 
-    private  EditText InputFb;
+    /*Tablet1*/
+
+    private FrameLayout[] t1pageLayout;
+    private ImageButton t1proceedButton;
+    private  EditText t1InputFb;
+    private ImageButton t1submitButton;
+    private ImageButton t1cancelButton;
+
+     /*Tablet2*/
+
+    private FrameLayout[] t2pageLayout;
+    private  EditText t2InputFb;
+    private ImageButton t2submitButton;
+    private ImageButton t2cancelButton;
+
+      /*Tablet3*/
+
+    private FrameLayout[] t3pageLayout;
+    private  EditText t3InputFb;
+    private  EditText t3Name;
+    private  EditText t3Email;
+    private ImageButton t3submitButton;
+    private ImageButton t3cancelButton;
+    private ImageButton t3proceedButton;
+    private ImageButton t3regButton;
+    private ImageView t3Warning;
+
+      /*Tablet4*/
+
+    private FrameLayout[] t4pageLayout;
+    private  EditText t4InputFb;
+    private ImageButton t4submitButton;
+    private ImageView t4Warning;
 
     private  boolean requested = false;
 
-    private Button submitButton;
-    private Button skipButton;
 
-    private TextView ScantextView;
+
+    public int TabletNo;
+    public int PageNo=0;
+
+
+
 
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
@@ -468,23 +502,151 @@ public class VideoActivity extends Activity {
             java.util.Locale locale = new 	java.util.Locale("EN");
             java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("hh-mm-ss-a", locale);
             String dataIn=df.format(new Date());
-
-            writeStringAsFile(InputFb.getText().toString(),dataIn);
-            fbLayout.setVisibility(View.INVISIBLE);
-            InputFb.setText("I love the content");
+            String toAdd=(TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:null).getText().toString();
+            if(TabletNo==3){
+                toAdd+="-"+t3Name.getText().toString();
+            }
+            writeStringAsFile(toAdd,dataIn);
+            GotoNextPage(TabletNo);
+            (TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:null).setText("");
         }
     };
 
-    private OnClickListener buttonSkipListener = new OnClickListener() {
+    private OnClickListener buttonEmailListener= new OnClickListener() {
         @Override
         public void onClick(View v){
-          videoView.stopPlayback();
-            fbLayout.clearAnimation();
-            videoView.setVisibility((View.INVISIBLE));
-            mainLayout.setVisibility(View.INVISIBLE);
-            fbLayout.setVisibility(View.VISIBLE);
+
+                if(basic.isValidEmail( ((TabletNo==3)?t3Email: t4InputFb).getText().toString())){
+                    ((TabletNo==3)?t3Warning:t4Warning).setVisibility(View.INVISIBLE);
+                    GotoNextPage(TabletNo);
+                    ((TabletNo==3)?t3Email: t4InputFb).setText("");
+                }else{
+                    ((TabletNo==3)?t3Warning:t4Warning).setVisibility(View.VISIBLE);
+                }
         }
     };
+
+
+
+    private OnClickListener buttonProceedListener = new OnClickListener() {
+        @Override
+        public void onClick(View v){
+            GotoNextPage(TabletNo);
+        }
+    };
+
+    private OnClickListener buttonProceedDelayListener = new OnClickListener() {
+        @Override
+        public void onClick(View v){
+            GotoNextPage(TabletNo);
+            basic.setTimeout(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("video", "Executed after 5000 ms!");
+                    GotoNextPage(TabletNo);
+                }
+            },3000);
+        }
+    };
+
+    public void GotoNextPage(int ScanNo){
+//        if(ScanNo!=TabletNo)
+//            return;
+        if(TabletNo==1){
+            for(int t=0;t<t1pageLayout.length;t++){
+            if(t1pageLayout[t].getVisibility()== View.VISIBLE) {
+
+                PageNo=t+1;
+                t1pageLayout[t].setVisibility(View.INVISIBLE);
+                t1pageLayout[PageNo].setVisibility(View.VISIBLE);
+                if(PageNo==(t1pageLayout.length-1)){
+                    basic.setTimeout(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("video", "Executed after 5000 ms!");
+                            t1pageLayout[PageNo].setVisibility(View.INVISIBLE);
+                            PageNo=0;
+                            t1pageLayout[PageNo].setVisibility(View.VISIBLE);
+                        }
+                    },5000);
+                    break;
+                }
+                break;
+            }
+            }
+        }else if(TabletNo==2){
+            for(int t=0;t<t2pageLayout.length;t++){
+                if(t2pageLayout[t].getVisibility()== View.VISIBLE) {
+
+                    PageNo=t+1;
+                    t2pageLayout[t].setVisibility(View.INVISIBLE);
+                    t2pageLayout[PageNo].setVisibility(View.VISIBLE);
+                    if(PageNo==(t2pageLayout.length-1)){
+                        basic.setTimeout(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("video", "Executed after 5000 ms!");
+                                t2pageLayout[PageNo].setVisibility(View.INVISIBLE);
+                                PageNo=0;
+                                t2pageLayout[PageNo].setVisibility(View.VISIBLE);
+                            }
+                        },5000);
+                        break;
+                    }
+                    break;
+                }
+            }
+
+        }else if(TabletNo==3){
+            for(int t=0;t<t3pageLayout.length;t++){
+                if(t3pageLayout[t].getVisibility()== View.VISIBLE) {
+
+                    PageNo=t+1;
+                    t3pageLayout[t].setVisibility(View.INVISIBLE);
+                    t3pageLayout[PageNo].setVisibility(View.VISIBLE);
+                    if(PageNo==(t3pageLayout.length-1)){
+                        basic.setTimeout(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("video", "Executed after 5000 ms!");
+                                t3pageLayout[PageNo].setVisibility(View.INVISIBLE);
+                                PageNo=0;
+                                t3pageLayout[PageNo].setVisibility(View.VISIBLE);
+                            }
+                        },5000);
+                        break;
+                    }
+                    break;
+                }
+            }
+
+        }else if(TabletNo==4){
+            for(int t=0;t<t4pageLayout.length;t++){
+                if(t4pageLayout[t].getVisibility()== View.VISIBLE) {
+
+                    PageNo=t+1;
+                    t4pageLayout[t].setVisibility(View.INVISIBLE);
+                    t4pageLayout[PageNo].setVisibility(View.VISIBLE);
+                    if(PageNo==(t4pageLayout.length-1)){
+                        basic.setTimeout(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("video", "Executed after 5000 ms!");
+                                t4pageLayout[PageNo].setVisibility(View.INVISIBLE);
+                                PageNo=0;
+                                t4pageLayout[PageNo].setVisibility(View.VISIBLE);
+                            }
+                        },5000);
+                        break;
+                    }
+                    break;
+                }
+            }
+
+        }
+    }
+
+
 
     public void writeStringAsFile(String fileContents, String fileName) {
         Log.d("video",fileName);
@@ -556,34 +718,82 @@ public class VideoActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         canPlay=true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
-//        textView=findViewById(R.id.textView);
-        videoView=findViewById(R.id.videoView);
-        InputFb =findViewById((R.id.feedback));
-        fbLayout=findViewById(R.id.fbLayout);
-        mainLayout=findViewById(R.id.videoLayout);
 
-        submitButton=findViewById(R.id.submit_button);
-        skipButton=findViewById((R.id.skipBut));
-        ScantextView=findViewById(((R.id.textView2)));
-        ScantextView.setText("Please scan here");
+        TabletNo=2;
+        pageLayout=new FrameLayout[4];
 
-        ReadRFIDs();
+        pageLayout[0]=findViewById(R.id.t1);
+        pageLayout[1]=findViewById(R.id.t2);
+        pageLayout[2]=findViewById(R.id.t3);
+        pageLayout[3]=findViewById(R.id.t4);
 
-//        android.util.DisplayMetrics displaymetrics = getResources().getDisplayMetrics();
-//
-//        skipButton.setX(displaymetrics.widthPixels -(skipButton.getHeight()+20));
-//        skipButton.setY(0);
-        skipButton.setOnClickListener(buttonSkipListener);
-        submitButton.setOnClickListener(buttonSubmitListener);
-        // Get USB manager
-        mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-        // Initialize reader
-        mReader = new Reader(mManager);
+        t1pageLayout= new FrameLayout[4];
 
-        InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        t1pageLayout[0]=findViewById(R.id.t1p1);
+        t1pageLayout[1]=findViewById(R.id.t1p2);
+        t1pageLayout[2]=findViewById(R.id.t1p3);
+        t1pageLayout[3]=findViewById(R.id.t1p4);
+        t1InputFb=findViewById(R.id.t1feedback);
+        t1InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus) {
+//                    HideView();
+//                }
+                HideView();
+            }
+        });
+        t1proceedButton=findViewById(R.id.t1proceedBut);
+        t1proceedButton.setOnClickListener(buttonProceedListener);
+
+        t1submitButton=findViewById(R.id.t1sendBut);
+        t1submitButton.setOnClickListener(buttonSubmitListener);
+        t1cancelButton=findViewById(R.id.t1cancelBut);
+        t1cancelButton.setOnClickListener(buttonProceedListener);
+
+
+        t2pageLayout= new FrameLayout[3];
+
+        t2pageLayout[0]=findViewById(R.id.t2p1);
+        t2pageLayout[1]=findViewById(R.id.t2p2);
+        t2pageLayout[2]=findViewById(R.id.t2p3);
+        t2InputFb=findViewById(R.id.t2feedback);
+
+        t2InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus) {
+//                    HideView();
+//                }
+                HideView();
+            }
+        });
+
+        t2submitButton=findViewById(R.id.t2sendBut);
+        t2submitButton.setOnClickListener(buttonSubmitListener);
+        t2cancelButton=findViewById(R.id.t2cancelBut);
+        t2cancelButton.setOnClickListener(buttonProceedListener);
+
+
+        t3pageLayout= new FrameLayout[6];
+
+        t3pageLayout[0]=findViewById(R.id.t3p1);
+        t3pageLayout[1]=findViewById(R.id.t3p2);
+        t3pageLayout[2]=findViewById(R.id.t3p3);
+        t3pageLayout[3]=findViewById(R.id.t3p4);
+        t3pageLayout[4]=findViewById(R.id.t3p5);
+        t3pageLayout[5]=findViewById(R.id.t3p6);
+
+        t3InputFb=findViewById(R.id.t3feedback);
+        t3Name=findViewById(R.id.t3Name);
+        t3Email=findViewById(R.id.t3Email);
+        t3Warning=findViewById(R.id.t3Warn);
+
+        t3InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
@@ -591,6 +801,76 @@ public class VideoActivity extends Activity {
                 }
             }
         });
+        t3Name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    HideView();
+                }
+            }
+        });
+        t3Email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    HideView();
+                }
+            }
+        });
+
+        t3proceedButton=findViewById((R.id.t3proceedBut));
+        t3proceedButton.setOnClickListener(buttonEmailListener);
+
+        t3submitButton=findViewById(R.id.t3sendBut);
+        t3submitButton.setOnClickListener(buttonSubmitListener);
+        t3cancelButton=findViewById(R.id.t3cancelBut);
+        t3cancelButton.setOnClickListener(buttonProceedListener);
+        t3regButton=findViewById(R.id.t3regBut);
+        t3regButton.setOnClickListener(buttonProceedDelayListener);
+
+
+        t4pageLayout= new FrameLayout[3];
+
+        t4pageLayout[0]=findViewById(R.id.t4p1);
+        t4pageLayout[1]=findViewById(R.id.t4p2);
+        t4pageLayout[2]=findViewById(R.id.t4p3);
+        t4InputFb=findViewById(R.id.t4feedback);
+        t4Warning=findViewById(R.id.t4Warn);
+        t4InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus) {
+//                    HideView();
+//                }
+                HideView();
+            }
+        });
+
+        t4submitButton=findViewById(R.id.t4proceedBut);
+        t4submitButton.setOnClickListener(buttonEmailListener);
+
+        ReadRFIDs();
+
+
+//        submitButton.setOnClickListener(buttonSubmitListener);
+        // Get USB manager
+        mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        // Initialize reader
+        mReader = new Reader(mManager);
+
+        for(int t=0;t<pageLayout.length;t++){
+            pageLayout[t].setVisibility(View.INVISIBLE);
+        }
+        pageLayout[TabletNo-1].setVisibility(View.VISIBLE);
+
+//        InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus) {
+//                    HideView();
+//                }
+//            }
+//        });
         mReader.setOnStateChangeListener(new OnStateChangeListener() {
 
             @Override
@@ -662,7 +942,7 @@ public class VideoActivity extends Activity {
 
                     @Override
                     public void run() {
-                        checkVideo(outputString);
+                        checkPage(outputString);
                     }
                 });
 
@@ -686,10 +966,9 @@ public class VideoActivity extends Activity {
 //        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 //Remove notification bar
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
 try {
     // Register receiver for USB permission
@@ -714,6 +993,7 @@ try {
 //            }
 //        }
         RequestDevice();
+HideView();
 
     }
 
@@ -767,42 +1047,7 @@ try {
         super.onDestroy();
     }
 
-
-
-    public void playVideo(String Dpath) {
-//        if(!videoView.isPlaying())
-        {
-//            MediaController m = new MediaController(this);
-//            videoView.setMediaController(m);
-            videoView.setMediaController(null);
-            Uri u = Uri.parse(Environment.getExternalStorageDirectory() +Dpath);
-
-//            File f = new File(Environment.getExternalStorageDirectory() + Dpath);
-//
-//            Log.d("video", f.exists() + "Playing Video " + Environment.getExternalStorageDirectory() + Dpath);
-
-            videoView.setVideoURI(u);
-            videoView.seekTo(0);
-            videoView.start();
-            fbLayout.setVisibility(View.INVISIBLE);
-            videoView.setVisibility((View.VISIBLE));
-            mainLayout.setVisibility(View.VISIBLE);
-            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    fbLayout.clearAnimation();
-                    videoView.setVisibility((View.INVISIBLE));
-                    mainLayout.setVisibility(View.INVISIBLE);
-                    fbLayout.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-    }
-    public void stopVideo() {
-        videoView.stopPlayback();
-    }
-
-    boolean CheckVideoList(String msg,List<String> videos){
+    boolean CheckPageList(String msg,List<String> videos){
         for(int t=0;t<videos.size();t++){
 //            Log.e("video",videos.get(t));
             if(videos.get(t).contains(msg)){
@@ -811,38 +1056,24 @@ try {
         }
         return false;
     }
-    private void checkVideo(String msg){
+    private void checkPage(String msg){
 //        Log.d("video",msg);
         if(msg.length()>14)
             return;
-        if(CheckVideoList(msg,Uid1)){
+        if(PageNo>0)
+            return;
+        if(CheckPageList(msg,Uid1)){
+            GotoNextPage(1);
             //okay concern video
-            playVideo(SrcPath1);
-        }else if(CheckVideoList(msg,Uid2)){
+        }else if(CheckPageList(msg,Uid2)){
+            GotoNextPage(2);
             //okay concern video
-            playVideo(SrcPath2);
-        }else if(CheckVideoList(msg,Uid3)){
+        }else if(CheckPageList(msg,Uid3)){
             //okay concern video
-            playVideo(SrcPath3);
-        }else if(CheckVideoList(msg,Uid4)){
+            GotoNextPage(3);
+        }else if(CheckPageList(msg,Uid4)){
             //okay concern video
-            playVideo(SrcPath4);
+            GotoNextPage(4);
         }
-//        else if(msg.equals(Uid5)){
-//            //okay concern video
-//            playVideo(SrcPath5);
-//        }else if(msg.equals(Uid6)){
-//            //okay concern video
-//            playVideo(SrcPath6);
-//        }else if(msg.equals(Uid7)){
-//            //okay concern video
-//            playVideo(SrcPath7);
-//        }else if(msg.equals(Uid8)){
-//            //okay concern video
-//            playVideo(SrcPath8);
-//        }
     }
-
-
-
 }

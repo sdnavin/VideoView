@@ -1,4 +1,4 @@
-package com.lb.videoview;
+package com.lb.akhlaquna;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

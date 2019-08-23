@@ -1,4 +1,4 @@
-package com.lb.videoview;
+package com.lb.akhlaquna;
 
 import org.junit.Test;
 

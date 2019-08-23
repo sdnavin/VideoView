@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context="com.lb.videoview.VideoActivity">
+    tools:context="com.lb.akhlaquna.VideoActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -15,126 +15,537 @@
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="false"
-        android:padding="0dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/logo" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@android:color/background_light"
-        android:textSize="72sp"
-        android:textStyle="bold"
-        android:typeface="normal"
-        tools:text="Please Scan here" />
-
     <FrameLayout
-        android:id="@+id/videoLayout"
+        android:id="@+id/t3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/background_dark"
-        android:backgroundTint="@android:color/background_dark"
-        android:fitsSystemWindows="true"
-        android:visibility="invisible">
+        android:visibility="visible">
 
-        <!--<LinearLayout-->
-        <!--android:id="@+id/fullscreen_content_controls"-->
-        <!--style="?metaButtonBarStyle"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="bottom|center_horizontal"-->
-        <!--android:background="@color/black_overlay"-->
-        <!--android:orientation="vertical"-->
-        <!--tools:ignore="UselessParent">-->
-
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-
-            android:foregroundGravity="center"
-            android:visibility="invisible" />
-
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/t3p1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/skipBut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="1050dp"
-                android:layout_marginTop="20dp"
-                android:background="@android:color/transparent"
-                android:text="Skip"
-                android:textColor="@android:color/background_light" />
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/p1img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t3img12" />
+        </FrameLayout>
 
-        <!--</LinearLayout>-->
+        <FrameLayout
+            android:id="@+id/t3p2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t3img15" />
+
+            <EditText
+                android:id="@+id/t3feedback"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="230dp"
+                android:layout_marginRight="225dp"
+                android:layout_marginTop="165dp"
+                android:ems="10"
+                android:focusable="auto"
+                android:gravity="right"
+                android:inputType="textPersonName"
+                android:layoutDirection="rtl"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/darker_gray"
+                android:textColorLink="@android:color/darker_gray"
+                android:textDirection="rtl"
+                android:textSize="24sp"
+                android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar" />
+
+            <EditText
+                android:id="@+id/t3Name"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="230dp"
+                android:layout_marginRight="225dp"
+                android:layout_marginTop="510dp"
+                android:ems="10"
+                android:focusable="auto"
+                android:gravity="right"
+                android:inputType="textPersonName"
+                android:layoutDirection="rtl"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/darker_gray"
+                android:textColorLink="@android:color/darker_gray"
+                android:textDirection="rtl"
+                android:textSize="24sp"
+                android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar" />
+
+            <ImageButton
+                android:id="@+id/t3cancelBut"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="115dp"
+                android:layout_marginTop="280dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/t3sendBut"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginRight="115dp"
+                android:layout_marginTop="280dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t3p3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t3img18" />
+
+            <ImageButton
+                android:id="@+id/t3regBut"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="240dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t3p4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p1img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t4img9" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t3p5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t4img12" />
+
+            <ImageView
+                android:id="@+id/t3Warn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t4img15"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/t3Email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginBottom="295dp"
+                android:layout_marginLeft="220dp"
+                android:layout_marginRight="220dp"
+                android:layout_marginTop="400dp"
+                android:background="@color/ic_launcher_background"
+                android:backgroundTint="@color/ic_launcher_background"
+                android:ems="10"
+                android:focusable="auto"
+                android:gravity="bottom"
+                android:inputType="textPersonName"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/darker_gray"
+                android:textColorLink="@android:color/darker_gray"
+                android:textSize="24sp"
+                android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar" />
+
+            <ImageButton
+                android:id="@+id/t3proceedBut"
+                android:layout_width="200dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="250dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t3p6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t4img18" />
+
+        </FrameLayout>
+
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/fbLayout"
+        android:id="@+id/t1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/background_dark"
-        android:backgroundTint="@android:color/black"
-        android:backgroundTintMode="multiply"
-        android:visibility="invisible">
+        android:visibility="visible">
 
-        <TextView
-            android:id="@+id/textView3"
+        <FrameLayout
+            android:id="@+id/t1p1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="20dp"
-            android:paddingTop="150dp"
-            android:text="Please add your Feedback"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-            android:textColor="@android:color/darker_gray"
-            android:textStyle="bold" />
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/feedback"
+            <ImageView
+                android:id="@+id/p1img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t1img9" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t1p2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="200dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="250dp"
-            android:ems="10"
-            android:focusable="auto"
-            android:gravity="left"
-            android:inputType="textPersonName"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:text="I love the content"
-            android:textAlignment="viewStart"
-            android:textColor="@android:color/darker_gray"
-            android:textColorLink="@android:color/darker_gray"
-            android:textSize="24sp" />
+            android:visibility="invisible">
 
-        <Button
-            android:id="@+id/submit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="250dp"
-            android:width="500dp"
-            android:height="75dp"
-            android:text="Submit"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/p2bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t1img12" />
+
+            <ImageButton
+                android:id="@+id/t1proceedBut"
+                android:layout_width="250dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="60dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t1p3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t1img15" />
+
+            <EditText
+                android:id="@+id/t1feedback"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|center_horizontal|center"
+                android:layout_marginBottom="150dp"
+                android:layout_marginEnd="210dp"
+                android:layout_marginStart="200dp"
+                android:ems="10"
+                android:focusable="auto"
+                android:foregroundGravity="center_vertical|center_horizontal|center"
+                android:gravity="center_vertical|center_horizontal|center"
+                android:inputType="textShortMessage|textPersonName"
+                android:layoutDirection="rtl"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/darker_gray"
+                android:textColorLink="@android:color/darker_gray"
+                android:textDirection="rtl"
+                android:textSize="24sp"
+                android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar" />
+
+            <ImageButton
+                android:id="@+id/t1cancelBut"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="115dp"
+                android:layout_marginTop="225dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/t1sendBut"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginRight="115dp"
+                android:layout_marginTop="225dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t1p4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t1img18" />
+
+        </FrameLayout>
+
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/t2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <FrameLayout
+            android:id="@+id/t2p1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/p1img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t2img8" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t2p2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t2img11" />
+
+            <EditText
+                android:id="@+id/t2feedback"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|center_horizontal|center"
+                android:layout_marginBottom="150dp"
+                android:layout_marginEnd="210dp"
+                android:layout_marginStart="200dp"
+                android:ems="10"
+                android:focusable="auto"
+                android:foregroundGravity="center_vertical|center_horizontal|center"
+                android:gravity="center_vertical|center_horizontal|center"
+                android:inputType="textPersonName"
+                android:layoutDirection="rtl"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/darker_gray"
+                android:textColorLink="@android:color/darker_gray"
+                android:textDirection="rtl"
+                android:textSize="24sp"
+                android:theme="@style/AppTheme" />
+
+            <ImageButton
+                android:id="@+id/t2cancelBut"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="115dp"
+                android:layout_marginTop="225dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/t2sendBut"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginRight="115dp"
+                android:layout_marginTop="225dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t2p3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t2img14" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/t4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <FrameLayout
+            android:id="@+id/t4p1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/p1img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t4img9" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t4p2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t4img12" />
+
+            <ImageView
+                android:id="@+id/t4Warn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t4img15"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/t4feedback"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginBottom="295dp"
+                android:layout_marginLeft="220dp"
+                android:layout_marginRight="220dp"
+                android:layout_marginTop="400dp"
+                android:background="@color/ic_launcher_background"
+                android:backgroundTint="@color/ic_launcher_background"
+                android:ems="10"
+                android:focusable="auto"
+                android:gravity="bottom"
+                android:inputType="textPersonName"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/darker_gray"
+                android:textColorLink="@android:color/darker_gray"
+                android:textSize="24sp"
+                android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar" />
+
+            <ImageButton
+                android:id="@+id/t4proceedBut"
+                android:layout_width="200dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="250dp"
+                android:adjustViewBounds="false"
+                android:background="@color/black_overlay"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                android:src="@android:color/transparent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/t4p3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/p2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/t4img18" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
 </FrameLayout>
