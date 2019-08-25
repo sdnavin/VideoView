@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'abc.123'
+            storeFile file('C:/Users/richard.navin/Documents/AndroidStore/akhlaquna.jks')
+            storePassword 'abc.123'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.lb.akhlaquna"
@@ -14,6 +22,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }

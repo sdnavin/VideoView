@@ -19,7 +19,7 @@
         android:id="@+id/t3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <FrameLayout
             android:id="@+id/t3p1"
@@ -54,7 +54,7 @@
                 android:layout_marginBottom="0dp"
                 android:layout_marginLeft="230dp"
                 android:layout_marginRight="225dp"
-                android:layout_marginTop="165dp"
+                android:layout_marginTop="140dp"
                 android:ems="10"
                 android:focusable="auto"
                 android:gravity="right"
@@ -76,7 +76,7 @@
                 android:layout_marginBottom="0dp"
                 android:layout_marginLeft="230dp"
                 android:layout_marginRight="225dp"
-                android:layout_marginTop="510dp"
+                android:layout_marginTop="480dp"
                 android:ems="10"
                 android:focusable="auto"
                 android:gravity="right"
@@ -125,7 +125,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -153,7 +152,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p1img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -167,7 +165,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -186,16 +183,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginBottom="295dp"
+                android:layout_marginBottom="280dp"
                 android:layout_marginLeft="220dp"
                 android:layout_marginRight="220dp"
-                android:layout_marginTop="400dp"
+                android:layout_marginTop="370dp"
                 android:background="@color/ic_launcher_background"
                 android:backgroundTint="@color/ic_launcher_background"
                 android:ems="10"
                 android:focusable="auto"
                 android:gravity="bottom"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:textAlignment="viewStart"
                 android:textColor="@android:color/darker_gray"
                 android:textColorLink="@android:color/darker_gray"
@@ -224,7 +221,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -238,7 +234,7 @@
         android:id="@+id/t1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <FrameLayout
             android:id="@+id/t1p1"
@@ -246,7 +242,6 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/p1img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -287,7 +282,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -348,7 +342,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -370,7 +363,6 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/p1img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -384,7 +376,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -445,7 +436,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -467,7 +457,6 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/p1img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -481,7 +470,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
@@ -500,16 +488,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginBottom="295dp"
+                android:layout_marginBottom="280dp"
                 android:layout_marginLeft="220dp"
                 android:layout_marginRight="220dp"
-                android:layout_marginTop="400dp"
+                android:layout_marginTop="370dp"
                 android:background="@color/ic_launcher_background"
                 android:backgroundTint="@color/ic_launcher_background"
                 android:ems="10"
                 android:focusable="auto"
                 android:gravity="bottom"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:textAlignment="viewStart"
                 android:textColor="@android:color/darker_gray"
                 android:textColorLink="@android:color/darker_gray"
@@ -538,7 +526,6 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"

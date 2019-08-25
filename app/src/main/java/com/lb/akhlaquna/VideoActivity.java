@@ -550,8 +550,8 @@ public class VideoActivity extends Activity {
     };
 
     public void GotoNextPage(int ScanNo){
-//        if(ScanNo!=TabletNo)
-//            return;
+        if(ScanNo!=TabletNo)
+            return;
         if(TabletNo==1){
             for(int t=0;t<t1pageLayout.length;t++){
             if(t1pageLayout[t].getVisibility()== View.VISIBLE) {
@@ -723,7 +723,7 @@ public class VideoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
 
-        TabletNo=2;
+        TabletNo=4;
         pageLayout=new FrameLayout[4];
 
         pageLayout[0]=findViewById(R.id.t1);
@@ -1057,7 +1057,7 @@ HideView();
         return false;
     }
     private void checkPage(String msg){
-//        Log.d("video",msg);
+        Log.d("video",msg);
         if(msg.length()>14)
             return;
         if(PageNo>0)
