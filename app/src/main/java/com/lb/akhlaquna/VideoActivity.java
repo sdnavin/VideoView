@@ -5,10 +5,12 @@ import android.app.Activity;
 //import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import android.media.MediaPlayer;
@@ -496,19 +498,25 @@ public class VideoActivity extends Activity {
         return "Error";
     }
 
-    private OnClickListener buttonSubmitListener = new OnClickListener() {
+    String DataToAdd="";
+    String FileName="";
+;    private OnClickListener buttonSubmitListener = new OnClickListener() {
         @Override
         public void onClick(View v){
+            DataToAdd="";
+            FileName="";
             java.util.Locale locale = new 	java.util.Locale("EN");
             java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("hh-mm-ss-a", locale);
-            String dataIn=df.format(new Date());
-            String toAdd=(TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:null).getText().toString();
+            FileName=df.format(new Date());
+            DataToAdd=(TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:null).getText().toString();
             if(TabletNo==3){
-                toAdd+="-"+t3Name.getText().toString();
+                DataToAdd+="-"+t3Name.getText().toString();
             }
-            writeStringAsFile(toAdd,dataIn);
+            if(TabletNo!=3) {
+                writeStringAsFile(DataToAdd, FileName);
+                (TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:null).setText("");
+            }
             GotoNextPage(TabletNo);
-            (TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:null).setText("");
         }
     };
 
@@ -519,6 +527,21 @@ public class VideoActivity extends Activity {
                 if(basic.isValidEmail( ((TabletNo==3)?t3Email: t4InputFb).getText().toString())){
                     ((TabletNo==3)?t3Warning:t4Warning).setVisibility(View.INVISIBLE);
                     GotoNextPage(TabletNo);
+                    if(TabletNo==3){
+                        DataToAdd+="-"+t3Email.getText().toString();
+                            writeStringAsFile(DataToAdd,FileName);
+                    }else{
+                        DataToAdd=t4InputFb.getText().toString();
+
+                        java.util.Locale locale = new 	java.util.Locale("EN");
+                        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("hh-mm-ss-a", locale);
+                        FileName=df.format(new Date());
+                        writeStringAsFile(DataToAdd,FileName);
+                    }
+                    if(TabletNo==3) {
+                        t3InputFb.setText("");
+                        t3Name.setText("");
+                    }
                     ((TabletNo==3)?t3Email: t4InputFb).setText("");
                 }else{
                     ((TabletNo==3)?t3Warning:t4Warning).setVisibility(View.VISIBLE);
@@ -539,13 +562,13 @@ public class VideoActivity extends Activity {
         @Override
         public void onClick(View v){
             GotoNextPage(TabletNo);
-            basic.setTimeout(new Runnable() {
+            /*basic.setTimeout(new Runnable() {
                 @Override
                 public void run() {
                     Log.d("video", "Executed after 5000 ms!");
                     GotoNextPage(TabletNo);
                 }
-            },3000);
+            },3000);*/
         }
     };
 
@@ -723,7 +746,7 @@ public class VideoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
 
-        TabletNo=4;
+        TabletNo=3;
         pageLayout=new FrameLayout[4];
 
         pageLayout[0]=findViewById(R.id.t1);
@@ -745,6 +768,39 @@ public class VideoActivity extends Activity {
 //                    HideView();
 //                }
                 HideView();
+                final InputMethodManager inputManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputManager != null && !hasFocus) {
+                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        });
+
+        // set listeners
+        t1InputFb.addTextChangedListener(new android.text.TextWatcher() {
+            int lastSpecialRequestsCursorPosition=0;
+            String specialRequests="";
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                lastSpecialRequestsCursorPosition = t1InputFb.getSelectionStart();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                t1InputFb.removeTextChangedListener(this);
+
+                if (t1InputFb.getLineCount() > 8) {
+                    t1InputFb.setText(specialRequests);
+                    t1InputFb.setSelection(lastSpecialRequestsCursorPosition);
+                }
+                else
+                    specialRequests = t1InputFb.getText().toString();
+
+                t1InputFb.addTextChangedListener(this);
             }
         });
         t1proceedButton=findViewById(R.id.t1proceedBut);
@@ -763,6 +819,34 @@ public class VideoActivity extends Activity {
         t2pageLayout[2]=findViewById(R.id.t2p3);
         t2InputFb=findViewById(R.id.t2feedback);
 
+        // set listeners
+        t2InputFb.addTextChangedListener(new android.text.TextWatcher() {
+            int lastSpecialRequestsCursorPosition=0;
+            String specialRequests="";
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                lastSpecialRequestsCursorPosition = t2InputFb.getSelectionStart();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                t2InputFb.removeTextChangedListener(this);
+
+                if (t2InputFb.getLineCount() > 8) {
+                    t2InputFb.setText(specialRequests);
+                    t2InputFb.setSelection(lastSpecialRequestsCursorPosition);
+                }
+                else
+                    specialRequests = t2InputFb.getText().toString();
+
+                t2InputFb.addTextChangedListener(this);
+            }
+        });
         t2InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -770,6 +854,10 @@ public class VideoActivity extends Activity {
 //                    HideView();
 //                }
                 HideView();
+                final InputMethodManager inputManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputManager != null && !hasFocus) {
+                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
             }
         });
 
@@ -779,14 +867,13 @@ public class VideoActivity extends Activity {
         t2cancelButton.setOnClickListener(buttonProceedListener);
 
 
-        t3pageLayout= new FrameLayout[6];
+        t3pageLayout= new FrameLayout[5];
 
         t3pageLayout[0]=findViewById(R.id.t3p1);
         t3pageLayout[1]=findViewById(R.id.t3p2);
         t3pageLayout[2]=findViewById(R.id.t3p3);
-        t3pageLayout[3]=findViewById(R.id.t3p4);
-        t3pageLayout[4]=findViewById(R.id.t3p5);
-        t3pageLayout[5]=findViewById(R.id.t3p6);
+        t3pageLayout[3]=findViewById(R.id.t3p5);
+        t3pageLayout[4]=findViewById(R.id.t3p6);
 
         t3InputFb=findViewById(R.id.t3feedback);
         t3Name=findViewById(R.id.t3Name);
@@ -799,6 +886,40 @@ public class VideoActivity extends Activity {
                 if (!hasFocus) {
                     HideView();
                 }
+                final InputMethodManager inputManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputManager != null && !hasFocus) {
+                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+
+            }
+        });
+
+        // set listeners
+        t3InputFb.addTextChangedListener(new android.text.TextWatcher() {
+            int lastSpecialRequestsCursorPosition=0;
+            String specialRequests="";
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                lastSpecialRequestsCursorPosition = t4InputFb.getSelectionStart();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                t3InputFb.removeTextChangedListener(this);
+
+                if (t3InputFb.getLineCount() > 6) {
+                    t3InputFb.setText(specialRequests);
+                    t3InputFb.setSelection(lastSpecialRequestsCursorPosition);
+                }
+                else
+                    specialRequests = t3InputFb.getText().toString();
+
+                t3InputFb.addTextChangedListener(this);
             }
         });
         t3Name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -807,6 +928,10 @@ public class VideoActivity extends Activity {
                 if (!hasFocus) {
                     HideView();
                 }
+                final InputMethodManager inputManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputManager != null && !hasFocus) {
+                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
             }
         });
         t3Email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -814,6 +939,10 @@ public class VideoActivity extends Activity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     HideView();
+                }
+                final InputMethodManager inputManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputManager != null && !hasFocus) {
+                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });
@@ -835,6 +964,35 @@ public class VideoActivity extends Activity {
         t4pageLayout[1]=findViewById(R.id.t4p2);
         t4pageLayout[2]=findViewById(R.id.t4p3);
         t4InputFb=findViewById(R.id.t4feedback);
+
+        // set listeners
+        t4InputFb.addTextChangedListener(new android.text.TextWatcher() {
+            int lastSpecialRequestsCursorPosition=0;
+            String specialRequests="";
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                lastSpecialRequestsCursorPosition = t4InputFb.getSelectionStart();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                t4InputFb.removeTextChangedListener(this);
+
+                if (t4InputFb.getLineCount() > 6) {
+                    t4InputFb.setText(specialRequests);
+                    t4InputFb.setSelection(lastSpecialRequestsCursorPosition);
+                }
+                else
+                    specialRequests = t4InputFb.getText().toString();
+
+                t4InputFb.addTextChangedListener(this);
+            }
+        });
         t4Warning=findViewById(R.id.t4Warn);
         t4InputFb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -843,6 +1001,10 @@ public class VideoActivity extends Activity {
 //                    HideView();
 //                }
                 HideView();
+                final InputMethodManager inputManager = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputManager != null && !hasFocus) {
+                    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
             }
         });
 

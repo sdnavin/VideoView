@@ -38,28 +38,37 @@
             android:id="@+id/t3p2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
             android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/p2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/t3img15" />
 
             <EditText
                 android:id="@+id/t3feedback"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:layout_marginBottom="0dp"
-                android:layout_marginLeft="230dp"
-                android:layout_marginRight="225dp"
-                android:layout_marginTop="140dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginBottom="295dp"
+                android:layout_marginLeft="210dp"
+                android:layout_marginRight="210dp"
+                android:layout_marginTop="210dp"
+                android:contextClickable="true"
                 android:ems="10"
                 android:focusable="auto"
-                android:gravity="right"
-                android:inputType="textPersonName"
+                android:gravity="top"
+                android:inputType="textMultiLine|textShortMessage|textLongMessage|textPersonName"
                 android:layoutDirection="rtl"
+                android:lines="6"
+                android:maxLines="6"
+                android:minLines="1"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:textAlignment="viewStart"
@@ -143,19 +152,6 @@
                 android:scaleType="fitCenter"
                 android:src="@android:color/transparent" />
 
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/t3p4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/t4img9" />
         </FrameLayout>
 
         <FrameLayout
@@ -284,6 +280,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/t1img15" />
 
@@ -292,15 +290,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal|center"
-                android:layout_marginBottom="150dp"
-                android:layout_marginEnd="210dp"
-                android:layout_marginStart="200dp"
+                android:layout_marginBottom="220dp"
+                android:layout_marginEnd="230dp"
+                android:layout_marginStart="220dp"
+                android:layout_marginTop="200dp"
                 android:ems="10"
                 android:focusable="auto"
-                android:foregroundGravity="center_vertical|center_horizontal|center"
-                android:gravity="center_vertical|center_horizontal|center"
-                android:inputType="textShortMessage|textPersonName"
+                android:gravity="top"
+                android:inputType="textMultiLine|textShortMessage|textLongMessage|textPersonName"
                 android:layoutDirection="rtl"
+                android:lines="10"
+                android:maxLines="8"
+                android:minLines="1"
+                android:singleLine="false"
                 android:textAlignment="viewStart"
                 android:textColor="@android:color/darker_gray"
                 android:textColorLink="@android:color/darker_gray"
@@ -378,6 +380,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/t2img11" />
 
@@ -386,15 +390,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|center_horizontal|center"
-                android:layout_marginBottom="150dp"
-                android:layout_marginEnd="210dp"
-                android:layout_marginStart="200dp"
-                android:ems="10"
+                android:layout_marginBottom="220dp"
+                android:layout_marginEnd="230dp"
+                android:layout_marginStart="220dp"
+                android:layout_marginTop="200dp"
+                android:ems="15"
                 android:focusable="auto"
-                android:foregroundGravity="center_vertical|center_horizontal|center"
-                android:gravity="center_vertical|center_horizontal|center"
-                android:inputType="textPersonName"
+                android:gravity="top"
+                android:inputType="textMultiLine|textShortMessage|textLongMessage|textPersonName"
                 android:layoutDirection="rtl"
+                android:lines="10"
+                android:maxLines="8"
+                android:minLines="1"
+                android:singleLine="false"
                 android:textAlignment="viewStart"
                 android:textColor="@android:color/darker_gray"
                 android:textColorLink="@android:color/darker_gray"
@@ -472,6 +480,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/t4img12" />
 
