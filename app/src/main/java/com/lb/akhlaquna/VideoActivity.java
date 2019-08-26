@@ -672,7 +672,10 @@ public class VideoActivity extends Activity {
 
 
     public void writeStringAsFile(String fileContents, String fileName) {
-        Log.d("video",fileName);
+        if(fileContents.trim().length()<=0){
+            return;
+        }
+//        Log.d("video",fileName);
         Context context = this.getBaseContext();
         java.util.Locale locale = new 	java.util.Locale("EN");
         java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd", locale);
@@ -746,7 +749,7 @@ public class VideoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
 
-        TabletNo=3;
+        TabletNo=4;
         pageLayout=new FrameLayout[4];
 
         pageLayout[0]=findViewById(R.id.t1);
