@@ -509,14 +509,25 @@ public class VideoActivity extends Activity {
             java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("hh-mm-ss-a", locale);
             FileName=df.format(new Date());
             DataToAdd=(TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:null).getText().toString();
-            if(TabletNo==3){
-                DataToAdd+="-"+t3Name.getText().toString();
-            }
+
             if(TabletNo!=3) {
                 writeStringAsFile(DataToAdd, FileName);
                 (TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:null).setText("");
             }
-            GotoNextPage(TabletNo);
+
+            if(DataToAdd.trim().length()>0)
+                GotoNextPage(TabletNo);
+
+            if(TabletNo==3){
+                DataToAdd+=(t3Name.getText().toString().trim().length()>0?"-"+t3Name.getText().toString():"");
+            }
+
+            (TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:t4InputFb).setText("");
+
+            if(TabletNo==3){
+                t3Name.setText("");
+                t3Email.setText("");
+            }
         }
     };
 
@@ -528,7 +539,12 @@ public class VideoActivity extends Activity {
                     ((TabletNo==3)?t3Warning:t4Warning).setVisibility(View.INVISIBLE);
                     GotoNextPage(TabletNo);
                     if(TabletNo==3){
-                        DataToAdd+="-"+t3Email.getText().toString();
+
+                        java.util.Locale locale = new 	java.util.Locale("EN");
+                        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("hh-mm-ss-a", locale);
+                        FileName=df.format(new Date());
+
+                        DataToAdd+=(t3Email.getText().toString().trim().length()>0?"-"+t3Email.getText().toString():"");
                             writeStringAsFile(DataToAdd,FileName);
                     }else{
                         DataToAdd=t4InputFb.getText().toString();
@@ -555,6 +571,17 @@ public class VideoActivity extends Activity {
         @Override
         public void onClick(View v){
             GotoNextPage(TabletNo);
+            //if(TabletNo!=3)
+            {
+                (TabletNo==1?t1InputFb:TabletNo==2?t2InputFb:TabletNo==3?t3InputFb:t4InputFb).setText("");
+            }
+
+
+            if(TabletNo==3){
+               t3Name.setText("");
+               t3Email.setText("");
+            }
+            DataToAdd="";
         }
     };
 
@@ -749,7 +776,7 @@ public class VideoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
 
-        TabletNo=4;
+        TabletNo=2;
         pageLayout=new FrameLayout[4];
 
         pageLayout[0]=findViewById(R.id.t1);
