@@ -79,7 +79,7 @@ public class VideoActivity extends Activity {
 
 
     private FrameLayout[] pageLayout;
-
+    private ImageButton startButton;
     /*Tablet1*/
 
     private FrameLayout[] t1pageLayout;
@@ -273,7 +273,7 @@ public class VideoActivity extends Activity {
             } catch (Exception e) {
 
                 result = e;
-                RequestDevice();
+//                RequestDevice();
             }
 
             return result;
@@ -539,7 +539,6 @@ public class VideoActivity extends Activity {
                     ((TabletNo==3)?t3Warning:t4Warning).setVisibility(View.INVISIBLE);
                     GotoNextPage(TabletNo);
                     if(TabletNo==3){
-
                         java.util.Locale locale = new 	java.util.Locale("EN");
                         java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("hh-mm-ss-a", locale);
                         FileName=df.format(new Date());
@@ -548,7 +547,6 @@ public class VideoActivity extends Activity {
                             writeStringAsFile(DataToAdd,FileName);
                     }else{
                         DataToAdd=t4InputFb.getText().toString();
-
                         java.util.Locale locale = new 	java.util.Locale("EN");
                         java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("hh-mm-ss-a", locale);
                         FileName=df.format(new Date());
@@ -565,7 +563,15 @@ public class VideoActivity extends Activity {
         }
     };
 
-
+    private OnClickListener buttonStartListener = new OnClickListener() {
+        @Override
+        public void onClick(View v){
+            GotoNextPage(TabletNo);
+            startButton.setClickable(false);
+            startButton.setEnabled(false);
+            startButton.setVisibility(View.INVISIBLE);
+        }
+    };
 
     private OnClickListener buttonProceedListener = new OnClickListener() {
         @Override
@@ -617,6 +623,9 @@ public class VideoActivity extends Activity {
                             t1pageLayout[PageNo].setVisibility(View.INVISIBLE);
                             PageNo=0;
                             t1pageLayout[PageNo].setVisibility(View.VISIBLE);
+                            startButton.setClickable(true);
+                            startButton.setEnabled(true);
+                            startButton.setVisibility(View.VISIBLE);
                         }
                     },5000);
                     break;
@@ -639,6 +648,9 @@ public class VideoActivity extends Activity {
                                 t2pageLayout[PageNo].setVisibility(View.INVISIBLE);
                                 PageNo=0;
                                 t2pageLayout[PageNo].setVisibility(View.VISIBLE);
+                                startButton.setClickable(true);
+                                startButton.setEnabled(true);
+                                startButton.setVisibility(View.VISIBLE);
                             }
                         },5000);
                         break;
@@ -662,6 +674,9 @@ public class VideoActivity extends Activity {
                                 t3pageLayout[PageNo].setVisibility(View.INVISIBLE);
                                 PageNo=0;
                                 t3pageLayout[PageNo].setVisibility(View.VISIBLE);
+                                startButton.setClickable(true);
+                                startButton.setEnabled(true);
+                                startButton.setVisibility(View.VISIBLE);
                             }
                         },5000);
                         break;
@@ -685,6 +700,9 @@ public class VideoActivity extends Activity {
                                 t4pageLayout[PageNo].setVisibility(View.INVISIBLE);
                                 PageNo=0;
                                 t4pageLayout[PageNo].setVisibility(View.VISIBLE);
+                                startButton.setClickable(true);
+                                startButton.setEnabled(true);
+                                startButton.setVisibility(View.VISIBLE);
                             }
                         },5000);
                         break;
@@ -776,7 +794,11 @@ public class VideoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
 
-        TabletNo=2;
+        TabletNo=1;
+
+        startButton=findViewById(R.id.startButton);
+        startButton.setOnClickListener(buttonStartListener);
+
         pageLayout=new FrameLayout[4];
 
         pageLayout[0]=findViewById(R.id.t1);
@@ -1172,7 +1194,7 @@ try {
     registerReceiver(mReceiver, filter);
 //        playVideo();
 }catch(Exception e){
-    e.printStackTrace();
+//    e.printStackTrace();
 }
         // Initialize reader spinner
 //        mReaderAdapter = new ArrayAdapter<String>(this,
